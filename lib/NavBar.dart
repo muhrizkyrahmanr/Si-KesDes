@@ -25,9 +25,8 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text("Si-KesDes"),
-        ),
+        title: Text("Si-KesDes"),
+        centerTitle: true,
       ),
       body: _changeSelectedNavBar[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

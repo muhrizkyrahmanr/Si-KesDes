@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sikesdes/DataAnak.dart';
+import 'package:sikesdes/PerkembanganPage.dart';
 import 'package:sikesdes/utils/colors.dart';
 
 class DetailAnakPage extends StatefulWidget {
@@ -41,9 +42,8 @@ class _DetailAnakPageState extends State<DetailAnakPage> with SingleTickerProvid
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text("Si-KesDes"),
-        ),
+        title: Text("Si-KesDes"),
+        centerTitle: true,
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: primaryColor,
@@ -55,6 +55,7 @@ class _DetailAnakPageState extends State<DetailAnakPage> with SingleTickerProvid
           controller: _tabController,
           children: <Widget>[
             DataAnak(),
+            PerkembanganPage()
           ]),
     );
   }

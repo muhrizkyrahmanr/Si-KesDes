@@ -20,9 +20,8 @@ class _AnakPageState extends State<AnakPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text("Si-KesDes"),
-        ),
+        title: Text("Si-KesDes"),
+        centerTitle: true,
       ),
       body: Container(
         padding: EdgeInsets.all(15.0),
