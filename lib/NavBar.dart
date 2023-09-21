@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sikesdes/Home_page.dart';
 import 'package:sikesdes/Balita_page.dart';
+import 'package:sikesdes/Login_page.dart';
 import 'package:sikesdes/Profil_page.dart';
 import 'package:sikesdes/utils/colors.dart';
 
@@ -16,7 +17,7 @@ class _NavBarState extends State<NavBar> {
 
   final List<Widget> _changeSelectedNavBar = [
     HomePage(),
-    BalitaPage(),
+    LoginPage(),
     ProfilPage()
   ];
 
@@ -74,6 +75,11 @@ class _NavBarState extends State<NavBar> {
         // Warna saat item diklik
         selectedItemColor: Colors.blue,
         // Metode yang dijalankan saat ditap
+        onTap: (index) async{
+          setState(() {
+            _currentIndex = index;
+          });
+        },
         // Agar bottom navigation tidak bergerak saat diklik
         type: BottomNavigationBarType.fixed,
         showUnselectedLabels: false,

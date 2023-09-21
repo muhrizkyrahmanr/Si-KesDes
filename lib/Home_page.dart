@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                   color: primaryColor,
                 ),
                 SizedBox(width: 10.0,),
-                Expanded(child: Text("Masukkan NIK Anak untuk melihat BIODATA dan Perkembangan Berat & Tinggi Badan", style: TextStyle(color: Colors.black.withOpacity(0.6)),)),
+                Expanded(child: Text("Masukkan NIK Anak untuk melihat Perkembangan Berat & Tinggi Badan", style: TextStyle(color: Colors.black.withOpacity(0.6)),)),
               ],
             )
           ),
