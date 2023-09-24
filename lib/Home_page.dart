@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sikesdes/DetailAnak_page.dart';
+import 'package:sikesdes/service/AnakService.dart';
 import 'package:sikesdes/utils/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -18,6 +19,10 @@ class _HomePageState extends State<HomePage> {
     'assets/banner/banner1.png',
     'assets/banner/banner2.png',
   ];
+
+  final TextEditingController _controllerNIK = TextEditingController();
+
+  String nama="",jeniskelamin="", tanggallahir="";
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +67,7 @@ class _HomePageState extends State<HomePage> {
             child: Card(
               color: Colors.white.withOpacity(0.7),
               child: TextFormField(
+                controller: _controllerNIK,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   prefixIcon: Icon(
@@ -83,8 +89,29 @@ class _HomePageState extends State<HomePage> {
                 customBorder: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                onTap: (){
-
+                onTap: () async{
+                  if(_controllerNIK.text.isNotEmpty) {
+                    showAlertDialogLoading(context);
+                    var getAnak = await AnakService().getAnak(_controllerNIK.text);
+                    if(getAnak != 0 && getAnak != 1){
+                      setState(() {
+                        nama = getAnak['nama'];
+                        if(getAnak['jenis_kelamin'] == "l"){
+                          jeniskelamin = "Laki-Laki";
+                        }else{
+                          jeniskelamin = "Perempuan";
+                        }
+                        tanggallahir = getAnak['tanggal_lahir'];
+                      });
+                      Navigator.pop(context);
+                    }else if(getAnak == 1){
+                      print("Tidak ditemukan");
+                      Navigator.pop(context);
+                    }else{
+                      print("Gagal terhubung keserver");
+                      Navigator.pop(context);
+                    }
+                  }
                 },
                 child: Container(
                   height: 40,
@@ -118,9 +145,9 @@ class _HomePageState extends State<HomePage> {
                 padding: EdgeInsets.all(15.0),
                 child: Column(
                   children: [
-                    cardInfo("Nama", ""),
-                    cardInfo("Jenis Kelamin", ""),
-                    cardInfo("Tanggal Lahir", ""),
+                    cardInfo("Nama", nama),
+                    cardInfo("Jenis Kelamin", jeniskelamin),
+                    cardInfo("Tanggal Lahir", tanggallahir),
                   ],
                 ),
               ),
@@ -239,6 +266,34 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
+    );
+  }
+
+  showAlertDialogLoading(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: Row(
+        children: [
+          const CircularProgressIndicator(
+            color: primaryColor,
+          ),
+          Container(
+              margin: const EdgeInsets.only(left: 15),
+              child: const Text(
+                "Loading...",
+                style: const TextStyle(fontFamily: 'poppins'),
+              )),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: alert,
+        );
+      },
     );
   }
 }

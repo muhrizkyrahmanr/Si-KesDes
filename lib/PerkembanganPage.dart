@@ -39,7 +39,7 @@ class PerkembanganPageState extends State<PerkembanganPage> {
     return Scaffold(
         body: Container(
           padding: EdgeInsets.all(8.0),
-          child: Column(
+          child: ListView(
               children: [
                 SfCartesianChart(
                 enableAxisAnimation: true,
