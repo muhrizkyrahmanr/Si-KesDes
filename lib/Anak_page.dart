@@ -29,12 +29,12 @@ class _AnakPageState extends State<AnakPage> {
           children: [
             InkWell(
               onTap: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DetailAnakPage()
-                    )
-                );
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => DetailAnakPage()
+                //     )
+                // );
               },
               child: Card(
                 color: Colors.white.withOpacity(0.7),

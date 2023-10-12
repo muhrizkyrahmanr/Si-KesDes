@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sikesdes/DetailAnak_page.dart';
 import 'package:sikesdes/service/AnakService.dart';
 import 'package:sikesdes/utils/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:sikesdes/utils/format_date.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,9 +24,11 @@ class _HomePageState extends State<HomePage> {
     'assets/banner/banner2.png',
   ];
 
+  FocusNode _textFocusNode = FocusNode();
   final TextEditingController _controllerNIK = TextEditingController();
+  bool _validNIK=true, _validKurang16NIK=true;
 
-  String nama="",jeniskelamin="", tanggallahir="";
+  String nama="",jeniskelamin="", tanggallahir="", umur="", nik_keluarga="", nama_orang_tua="", berat_badan="", tinggi_badan="";
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +74,9 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white.withOpacity(0.7),
               child: TextFormField(
                 controller: _controllerNIK,
+                focusNode: _textFocusNode,
+                inputFormatters: [LengthLimitingTextInputFormatter(16)],
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   prefixIcon: Icon(
@@ -77,6 +86,35 @@ class _HomePageState extends State<HomePage> {
                   hintText: 'Masukkan NIK Anak',
                   hintStyle: TextStyle(
                       fontSize: 13),
+                    suffixIcon: _validNIK == false
+                        ? Tooltip(
+                      preferBelow: false,
+                      decoration: BoxDecoration(
+                          color: Colors.red.withOpacity(0.9)
+                      ),
+                      triggerMode: TooltipTriggerMode.tap,
+                      message: 'NIK masih kosong',
+                      child: Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 20.0,
+                      ),
+                    )
+                        : _validKurang16NIK == false
+                        ? Tooltip(
+                      preferBelow: false,
+                      decoration: BoxDecoration(
+                          color: Colors.red.withOpacity(0.9)
+                      ),
+                      triggerMode: TooltipTriggerMode.tap,
+                      message: 'NIK kurang dari 16 digit',
+                      child: Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 20.0,
+                      ),
+                    )
+                        : null
                 ),
               ),
             ),
@@ -90,7 +128,25 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 onTap: () async{
-                  if(_controllerNIK.text.isNotEmpty) {
+                  if(_controllerNIK.text.isNotEmpty){
+                    if(_controllerNIK.text.length == 16){
+                      setState(() {
+                        _validNIK = true;
+                        _validKurang16NIK = true;
+                      });
+                    }else{
+                      setState(() {
+                        _validNIK = true;
+                        _validKurang16NIK = false;
+                      });
+                    }
+                  }else{
+                    setState((){
+                      _validNIK = false;
+                    });
+                  }
+
+                  if(_controllerNIK.text.isNotEmpty && _controllerNIK.text.length == 16) {
                     showAlertDialogLoading(context);
                     var getAnak = await AnakService().getAnak(_controllerNIK.text);
                     if(getAnak != 0 && getAnak != 1){
@@ -101,15 +157,23 @@ class _HomePageState extends State<HomePage> {
                         }else{
                           jeniskelamin = "Perempuan";
                         }
-                        tanggallahir = getAnak['tanggal_lahir'];
+                        if(getAnak['tanggal_lahir'] != null){
+                          DateTime dateTime = DateTime.parse(getAnak['tanggal_lahir']);
+                          tanggallahir =  FormatDate().formatTglIndo(DateFormat('yyyy-MM-dd').format(dateTime));
+                          umur=calculateAge(dateTime);
+                        }
+                        nik_keluarga = getAnak['nik_keluarga'];
+                        nama_orang_tua = getAnak['nama_orang_tua'];
+                        berat_badan = getAnak['berat_badan'].toString();
+                        tinggi_badan = getAnak['tinggi_badan'].toString();
                       });
                       Navigator.pop(context);
                     }else if(getAnak == 1){
-                      print("Tidak ditemukan");
                       Navigator.pop(context);
+                      infoUpdate("NIK ${_controllerNIK.text} Tidak Ditemukan");
                     }else{
-                      print("Gagal terhubung keserver");
                       Navigator.pop(context);
+                      infoUpdate("Gagal Terhubung Keserver");
                     }
                   }
                 },
@@ -162,12 +226,26 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 onTap: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DetailAnakPage()
-                      )
-                  );
+                  if(nama.isNotEmpty || jeniskelamin.isNotEmpty || tanggallahir.isNotEmpty){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DetailAnakPage(
+                              nama: nama,
+                              jenis_kelamin: jeniskelamin,
+                              tanggal_lahir: tanggallahir,
+                              umur: umur,
+                              nik_keluarga: nik_keluarga,
+                              nama_orang_tua: nama_orang_tua,
+                              berat_badan: berat_badan,
+                              tinggi_badan: tinggi_badan,
+                            )
+                        )
+                    );
+                  }else{
+                    _textFocusNode.requestFocus();
+                    infoUpdate("Lakukan Pencarian NIK Terlebih Dahulu");
+                  }
                 },
                 child: Container(
                   height: 40,
@@ -269,6 +347,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  infoUpdate(String text) async{
+    await Future.delayed(Duration(seconds: 0));
+    return QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: "Gagal",
+      text: '${text}',
+    );
+  }
+
   showAlertDialogLoading(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: Row(
@@ -295,5 +383,18 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
+  }
+
+  String calculateAge(DateTime birthDate) {
+    final now = DateTime.now();
+    final age = now.difference(birthDate);
+
+    final years = age.inDays ~/ 365;
+    final months = (age.inDays % 365) ~/ 30;
+    if(years == 0){
+      return '$months Bulan';
+    }else{
+      return '$months Bulan, $years Tahun';
+    }
   }
 }

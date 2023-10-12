@@ -5,10 +5,13 @@ import 'package:sikesdes/PerkembanganPage.dart';
 import 'package:sikesdes/utils/colors.dart';
 
 class DetailAnakPage extends StatefulWidget {
-  const DetailAnakPage({Key? key}) : super(key: key);
+  final String nama, jenis_kelamin, tanggal_lahir, umur, nik_keluarga, nama_orang_tua, berat_badan,tinggi_badan;
+  const DetailAnakPage({Key? key, required this.nama, required this.jenis_kelamin, required this.tanggal_lahir, required this.umur, required this.nik_keluarga, required this.nama_orang_tua, required this.berat_badan, required this.tinggi_badan}) : super(key: key);
 
   @override
   State<DetailAnakPage> createState() => _DetailAnakPageState();
+
+
 }
 
 class _DetailAnakPageState extends State<DetailAnakPage> with SingleTickerProviderStateMixin {
@@ -54,7 +57,16 @@ class _DetailAnakPageState extends State<DetailAnakPage> with SingleTickerProvid
       body:TabBarView(
           controller: _tabController,
           children: <Widget>[
-            DataAnak(),
+            DataAnak(
+              nama: widget.nama,
+              jenis_kelamin: widget.jenis_kelamin,
+              tanggal_lahir: widget.tanggal_lahir,
+              umur: widget.umur,
+              nik_keluarga: widget.nik_keluarga,
+              nama_orang_tua: widget.nama_orang_tua,
+              berat_badan: widget.berat_badan,
+              tinggi_badan: widget.tinggi_badan,
+            ),
             PerkembanganPage()
           ]),
     );

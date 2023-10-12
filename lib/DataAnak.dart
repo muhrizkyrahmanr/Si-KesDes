@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DataAnak extends StatefulWidget {
-  const DataAnak({Key? key}) : super(key: key);
+  final String nama, jenis_kelamin, tanggal_lahir, umur, nik_keluarga, nama_orang_tua, berat_badan,tinggi_badan;
+  const DataAnak({Key? key, required this.nama, required this.jenis_kelamin, required this.tanggal_lahir, required this.umur, required this.nik_keluarga, required this.nama_orang_tua, required this.berat_badan, required this.tinggi_badan}) : super(key: key);
 
   @override
   State<DataAnak> createState() => _DataAnakState();
@@ -15,14 +16,14 @@ class _DataAnakState extends State<DataAnak> {
         padding: EdgeInsets.all(18.0),
         child: ListView(
           children: [
-            cardInfo("Nama", "Muhammad Rizky"),
-            cardInfo("Jenis Kelamin", "Laki-Laki"),
-            cardInfo("Tanggal Lahir", "28 Maret 2023"),
-            cardInfo("Umur", "2 Bulan"),
-            cardInfo("NIK Keluarga", "1111111111111111"),
-            cardInfo("Nama Orang Tua", "Baco Becce"),
-            cardInfo("Berat Badan", "10 Kg"),
-            cardInfo("Tinggi Badan", "48 Cm"),
+            cardInfo("Nama", "${widget.nama}"),
+            cardInfo("Jenis Kelamin", "${widget.jenis_kelamin}"),
+            cardInfo("Tanggal Lahir", "${widget.tanggal_lahir}"),
+            cardInfo("Umur", "${widget.umur}"),
+            cardInfo("NIK Keluarga", "${widget.nik_keluarga}"),
+            cardInfo("Nama Orang Tua", "${widget.nama_orang_tua}"),
+            cardInfo("Berat Badan", "${widget.berat_badan} Kg"),
+            cardInfo("Tinggi Badan", "${widget.tinggi_badan} Cm"),
           ],
         ),
       )
