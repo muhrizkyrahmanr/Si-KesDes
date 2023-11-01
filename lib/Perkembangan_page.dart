@@ -54,8 +54,8 @@ class PerkembanganPageState extends State<PerkembanganPage> {
     num maxTinggiValue = 0;
     num maxBeratValue = 0;
     if(dataPerkembangan.isNotEmpty){
-      maxTinggiValue = dataPerkembangan.map((item) => item.tinggi_badan!).reduce((max, value) => max > value ? max : value);
-      maxBeratValue = dataPerkembangan.map((item) => item.berat_badan!).reduce((max, value) => max > value ? max : value);
+      maxTinggiValue = dataPerkembangan.map((item) => num.parse(item.tinggi_badan!)).reduce((max, value) => max > value ? max : value);
+      maxBeratValue = dataPerkembangan.map((item) => num.parse(item.berat_badan!)).reduce((max, value) => max > value ? max : value);
     }
     return Scaffold(
         body: Container(
@@ -88,7 +88,7 @@ class PerkembanganPageState extends State<PerkembanganPage> {
                       color: primaryColor,
                       dataSource: dataPerkembangan,
                       xValueMapper: (PerkembanganModel perkembangan, _) => "${perkembangan.bulan}\n${perkembangan.tahun}",
-                      yValueMapper: (PerkembanganModel perkembangan, _) => perkembangan.tinggi_badan,
+                      yValueMapper: (PerkembanganModel perkembangan, _) => num.parse(perkembangan.tinggi_badan!),
                       name: 'Tinggi Badan',
                       // Enable data label
                       dataLabelSettings: DataLabelSettings(isVisible: true))
@@ -119,7 +119,7 @@ class PerkembanganPageState extends State<PerkembanganPage> {
                           color: primaryColor,
                           dataSource: dataPerkembangan,
                           xValueMapper: (PerkembanganModel perkembangan, _) => "${perkembangan.bulan}\n${perkembangan.tahun}",
-                          yValueMapper: (PerkembanganModel perkembangan, _) => perkembangan.berat_badan,
+                          yValueMapper: (PerkembanganModel perkembangan, _) => num.parse(perkembangan.berat_badan!),
                           name: 'Berat Badan',
                           // Enable data label
                           dataLabelSettings: DataLabelSettings(isVisible: true))
