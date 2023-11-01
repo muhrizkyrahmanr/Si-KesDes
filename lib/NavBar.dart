@@ -1,34 +1,113 @@
 import 'package:flutter/material.dart';
+import 'package:sikesdes/Anak_page.dart';
 import 'package:sikesdes/Home_page.dart';
-import 'package:sikesdes/Balita_page.dart';
 import 'package:sikesdes/Login_page.dart';
 import 'package:sikesdes/Profil_page.dart';
 import 'package:sikesdes/utils/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
 
   @override
   State<NavBar> createState() => _NavBarState();
+
+
 }
 
 class _NavBarState extends State<NavBar> {
   int _currentIndex = 0;
+  String? token;
 
-  final List<Widget> _changeSelectedNavBar = [
-    HomePage(),
-    LoginPage(),
-    ProfilPage()
-  ];
+  bool searchActive = false;
+  String searchQuery = '';
+
+  void updateSearchQuery(bool search, String query) {
+    setState(() {
+      searchActive = search;
+      searchQuery = query;
+    });
+  }
+
+  clearTextSearch(){
+    updateSearchQuery(false, '');
+    _controllerSearch.clear();
+  }
+
+  final TextEditingController _controllerSearch = TextEditingController();
+  final FocusNode _focusSearch = FocusNode();
+  Icon cusIcon = Icon(Icons.search);
+  Widget cusSearchBar = Text("Si-KesDes");
+
+  @override
+  void initState() {
+    super.initState();
+    login();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _changeSelectedNavBar = [
+      HomePage(),
+      AnakPage(login: login, searchActive: searchActive, searchQuery: searchQuery, clearTextSearch: clearTextSearch),
+      ProfilPage(login: login),
+      LoginPage(login: login),
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Si-KesDes"),
+        title: cusSearchBar,
         centerTitle: true,
+        actions: [
+          if(token != null)...[
+            if(_currentIndex == 1)...[
+              Padding(
+                padding: EdgeInsets.only(right: 15.0),
+                child: IconButton(
+                  icon: cusIcon,
+                  color: Colors.white,
+                  onPressed: () async{
+                    if(cusIcon.icon == Icons.search){
+                      setState(() {
+                        cusIcon = Icon(Icons.cancel);
+                        cusSearchBar = TextField(
+                          focusNode: _focusSearch,
+                          autofocus: true,
+                          controller: _controllerSearch,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Masukkan NIK atau Nama Anak",
+                            hintStyle: TextStyle(fontSize: 15, color: Colors.white.withOpacity(0.5)),
+                          ),
+                          onChanged: (value) {
+                            updateSearchQuery(true, value);
+                          },
+                          style: TextStyle(fontSize: 18.0, color: Colors.white),
+                        );
+                      });
+                    }else{
+                      updateSearchQuery(false, '');
+                      if(!_controllerSearch.text.isEmpty){
+                        _controllerSearch.clear();
+                      }else {
+                        setState(() {
+                          cusIcon = Icon(Icons.search);
+                          cusSearchBar = Text("Si-KesDes");
+                        });
+                      }
+                    }
+                  },
+                ),
+              ),
+            ]
+          ]
+        ],
       ),
-      body: _changeSelectedNavBar[_currentIndex],
+      body: _currentIndex != 0
+           ? token == null
+            ? _changeSelectedNavBar[3]
+            : _changeSelectedNavBar[_currentIndex]
+           : _changeSelectedNavBar[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: primaryColor,
         items: [
@@ -85,5 +164,18 @@ class _NavBarState extends State<NavBar> {
         showSelectedLabels: false,
       ),
     );
+  }
+
+  Future login() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    if(preferences.getString("access_token") != null){
+      setState(() {
+        token = preferences.getString("access_token");
+      });
+    }else{
+      setState(() {
+        token = null;
+      });
+    }
   }
 }

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sikesdes/Anak_page.dart';
+import 'package:sikesdes/service/LoginService.dart';
 import 'package:sikesdes/utils/colors.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final VoidCallback login;
+  const LoginPage({Key? key, required this.login}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -26,8 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 30, left: 16,right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
         children: <Widget>[
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,12 +80,6 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                 ),
-                if(_validUsername == false)...[
-                  Padding(
-                    padding: EdgeInsets.only(left: 5.0),
-                    child: Text("Username masih kosong", style: TextStyle(fontSize: 13, color: Colors.red),),
-                  )
-                ],
                 SizedBox(
                   height: 5.0,
                 ),
@@ -133,12 +130,6 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                 ),
-                if(_validPassword == false)...[
-                  Padding(
-                    padding: EdgeInsets.only(left: 5.0),
-                    child: Text("Password masih kosong", style: TextStyle(fontSize: 13, color: Colors.red),),
-                  )
-                ],
                 SizedBox(height: 15),
                 Card(
                   color: primaryColor,
@@ -153,12 +144,8 @@ class _LoginPageState extends State<LoginPage> {
                       if (!_isLoading) {
                         if (_formKey.currentState!.validate()) {
                           if(!_contollerUsername.text.isEmpty && !_controllerPassword.text.isEmpty){
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AnakPage()
-                                )
-                            );
+                            showAlertDialogLoading(context);
+                            login();
                           }
                         }
                       }
@@ -167,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                       // }))
                     },
                     child: Container(
-                      height: 48,
+                      height: 45,
                       child: Center(
                         child: Text(
                           'Masuk',
@@ -199,5 +186,66 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _showPassword = !_showPassword;
     });
+  }
+
+  login() async{
+    var loginService = await LoginService().login(_contollerUsername.text, _controllerPassword.text);
+    FocusManager.instance.primaryFocus?.unfocus();
+    if(loginService == 1 || loginService == 0){
+      Navigator.pop(context);
+      if(loginService == 1){
+        showMessage("Username atau Password salah");
+      }else{
+        showMessage("Gagal Terhubung Keserver");
+      }
+    }else{
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.setString("access_token", loginService['auth']['token']);
+      await preferences.setString("nama", loginService['user']['nama']);
+      await preferences.setString("username", loginService['user']['username']);
+      await preferences.setString("role", loginService['user']['role']);
+      Navigator.pop(context);
+      print("Berhasil");
+      widget.login();
+    }
+  }
+
+  showMessage(String text) async{
+    await Future.delayed(Duration(seconds: 0));
+    return QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      confirmBtnColor: primaryColor,
+      title: "Gagal",
+      text: '${text}',
+    );
+  }
+
+  showAlertDialogLoading(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: Row(
+        children: [
+          const CircularProgressIndicator(
+            color: primaryColor,
+          ),
+          Container(
+              margin: const EdgeInsets.only(left: 15),
+              child: const Text(
+                "Loading...",
+                style: const TextStyle(fontFamily: 'poppins'),
+              )),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: alert,
+        );
+      },
+    );
   }
 }

@@ -45,6 +45,8 @@ dev_dependencies:
   intl:
   http: ^0.13.5
   quickalert:
+  flutter_localization: ^0.1.12
+  flutter_slidable: ^1.2.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -68,6 +70,7 @@ flutter:
   assets:
     - assets/banner/banner1.png
     - assets/banner/banner2.png
+    - assets/profile.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

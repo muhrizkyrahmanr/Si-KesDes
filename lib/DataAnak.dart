@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DataAnak extends StatefulWidget {
-  final String nama, jenis_kelamin, tanggal_lahir, umur, nik_keluarga, nama_orang_tua, berat_badan,tinggi_badan;
-  const DataAnak({Key? key, required this.nama, required this.jenis_kelamin, required this.tanggal_lahir, required this.umur, required this.nik_keluarga, required this.nama_orang_tua, required this.berat_badan, required this.tinggi_badan}) : super(key: key);
+  final String nik, nama, jenis_kelamin, tanggal_lahir, umur, nik_keluarga, nama_orang_tua, berat_badan,tinggi_badan;
+  const DataAnak({Key? key, required this.nik, required this.nama, required this.jenis_kelamin, required this.tanggal_lahir, required this.umur, required this.nik_keluarga, required this.nama_orang_tua, required this.berat_badan, required this.tinggi_badan}) : super(key: key);
 
   @override
   State<DataAnak> createState() => _DataAnakState();
@@ -16,6 +16,7 @@ class _DataAnakState extends State<DataAnak> {
         padding: EdgeInsets.all(18.0),
         child: ListView(
           children: [
+            cardInfo("NIK", "${widget.nik}"),
             cardInfo("Nama", "${widget.nama}"),
             cardInfo("Jenis Kelamin", "${widget.jenis_kelamin}"),
             cardInfo("Tanggal Lahir", "${widget.tanggal_lahir}"),

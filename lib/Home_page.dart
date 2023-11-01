@@ -24,11 +24,11 @@ class _HomePageState extends State<HomePage> {
     'assets/banner/banner2.png',
   ];
 
-  FocusNode _textFocusNode = FocusNode();
+  final FocusNode _textFocusNode = FocusNode();
   final TextEditingController _controllerNIK = TextEditingController();
   bool _validNIK=true, _validKurang16NIK=true;
 
-  String nama="",jeniskelamin="", tanggallahir="", umur="", nik_keluarga="", nama_orang_tua="", berat_badan="", tinggi_badan="";
+  String nik="", nama="",jeniskelamin="", tanggallahir="", umur="", nik_keluarga="", nama_orang_tua="", berat_badan="", tinggi_badan="";
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +128,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 onTap: () async{
+                  _textFocusNode.unfocus();
                   if(_controllerNIK.text.isNotEmpty){
                     if(_controllerNIK.text.length == 16){
                       setState(() {
@@ -151,6 +152,7 @@ class _HomePageState extends State<HomePage> {
                     var getAnak = await AnakService().getAnak(_controllerNIK.text);
                     if(getAnak != 0 && getAnak != 1){
                       setState(() {
+                        nik = getAnak['nik'].toString();
                         nama = getAnak['nama'];
                         if(getAnak['jenis_kelamin'] == "l"){
                           jeniskelamin = "Laki-Laki";
@@ -170,10 +172,10 @@ class _HomePageState extends State<HomePage> {
                       Navigator.pop(context);
                     }else if(getAnak == 1){
                       Navigator.pop(context);
-                      infoUpdate("NIK ${_controllerNIK.text} Tidak Ditemukan");
+                      showMessage("NIK ${_controllerNIK.text} Tidak Ditemukan");
                     }else{
                       Navigator.pop(context);
-                      infoUpdate("Gagal Terhubung Keserver");
+                      showMessage("Gagal Terhubung Keserver");
                     }
                   }
                 },
@@ -231,6 +233,8 @@ class _HomePageState extends State<HomePage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => DetailAnakPage(
+                              formperkembangan: false,
+                              nik: nik,
                               nama: nama,
                               jenis_kelamin: jeniskelamin,
                               tanggal_lahir: tanggallahir,
@@ -244,7 +248,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   }else{
                     _textFocusNode.requestFocus();
-                    infoUpdate("Lakukan Pencarian NIK Terlebih Dahulu");
+                    showMessage("Lakukan Pencarian NIK Terlebih Dahulu");
                   }
                 },
                 child: Container(
@@ -347,11 +351,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  infoUpdate(String text) async{
+  showMessage(String text) async{
     await Future.delayed(Duration(seconds: 0));
     return QuickAlert.show(
       context: context,
       type: QuickAlertType.error,
+      confirmBtnColor: primaryColor,
       title: "Gagal",
       text: '${text}',
     );
