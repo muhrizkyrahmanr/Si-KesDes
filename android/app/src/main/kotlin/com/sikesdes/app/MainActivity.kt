@@ -1,4 +1,4 @@
-package com.example.sikesdes
+package com.sikesdes.app
 
 import io.flutter.embedding.android.FlutterActivity
 

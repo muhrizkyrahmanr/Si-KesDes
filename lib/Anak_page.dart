@@ -87,7 +87,7 @@ class _AnakPageState extends State<AnakPage> {
   Widget build(BuildContext context) {
     setState(() {
       if(widget.searchActive == true && widget.searchQuery.isNotEmpty){
-        ShowListAnak = ListAnak.where((item) => item.nik.contains(widget.searchQuery) || item.nama.toLowerCase().contains(widget.searchQuery.toLowerCase())).toList();
+        ShowListAnak = ListAnak.where((item) => item.nik.toString().contains(widget.searchQuery) || item.nama.toLowerCase().contains(widget.searchQuery.toLowerCase())).toList();
       }else{
         ShowListAnak = ListAnak;
       }

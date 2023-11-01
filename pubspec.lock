@@ -18,13 +18,21 @@ packages:
     source: hosted
     version: "2.1.1"
   carousel_slider:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: carousel_slider
       sha256: "9c695cc963bf1d04a47bd6021f68befce8970bcd61d24938e1fb0918cf5d9c42"
       url: "https://pub.dev"
     source: hosted
     version: "4.2.1"
+  change_app_package_name:
+    dependency: "direct dev"
+    description:
+      name: change_app_package_name
+      sha256: f9ebaf68a4b5a68c581492579bb68273c523ef325fbf9ce2f1b57fb136ad023b
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   characters:
     dependency: transitive
     description:
@@ -95,7 +103,7 @@ packages:
     source: hosted
     version: "2.0.2"
   flutter_localization:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_localization
       sha256: a65ae241b865f2780f2ef624a4cdd019ca894d0b7df0a0b77190746ef0b9c8fa
@@ -108,7 +116,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_slidable:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_slidable
       sha256: "90787334388211e6810065550119b015e6fd3893584641194d500bf5bc7e6235"
@@ -126,7 +134,7 @@ packages:
     source: sdk
     version: "0.0.0"
   http:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: http
       sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
@@ -142,7 +150,7 @@ packages:
     source: hosted
     version: "4.0.2"
   intl:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: intl
       sha256: a3715e3bc90294e971cb7dc063fbf3cd9ee0ebf8604ffeafabd9e6f16abbdbe6
@@ -238,7 +246,7 @@ packages:
     source: hosted
     version: "2.1.6"
   quickalert:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: quickalert
       sha256: "0c21c9be68b9ae76082e1ad56db9f51202a38e617e08376f05375238277cfb5a"
@@ -339,7 +347,7 @@ packages:
     source: hosted
     version: "1.2.0"
   syncfusion_flutter_charts:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: syncfusion_flutter_charts
       sha256: b1c706cea163059ecfe89132ca078f83d31e54cc99ecd1fabe4810e1b1dacc95

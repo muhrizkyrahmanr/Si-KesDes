@@ -31,7 +31,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  carousel_slider: ^4.2.1
+  syncfusion_flutter_charts: ^23.1.36
+  intl:
+  http: ^0.13.5
+  quickalert:
+  flutter_localization: ^0.1.12
+  flutter_slidable: ^1.2.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -40,13 +46,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  carousel_slider: ^4.2.1
-  syncfusion_flutter_charts: ^23.1.36
-  intl:
-  http: ^0.13.5
-  quickalert:
-  flutter_localization: ^0.1.12
-  flutter_slidable: ^1.2.0
+  change_app_package_name: ^1.1.0
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
