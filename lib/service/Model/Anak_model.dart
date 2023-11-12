@@ -5,10 +5,10 @@ class AnakModel{
   String? tanggal_lahir;
   String? nik_keluarga;
   String? nama_orang_tua;
-  String? berat_badan;
-  String? tinggi_badan;
-  String? berat_badan_akhir;
-  String? tinggi_badan_akhir;
+  num? berat_badan;
+  num? tinggi_badan;
+  num? berat_badan_akhir;
+  num? tinggi_badan_akhir;
 
   AnakModel({
         required this.nik,

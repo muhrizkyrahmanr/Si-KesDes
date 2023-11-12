@@ -3,8 +3,8 @@ class PerkembanganModel{
   String? tanggal;
   String? bulan;
   String? tahun;
-  String? berat_badan;
-  String? tinggi_badan;
+  num? berat_badan;
+  num? tinggi_badan;
 
   PerkembanganModel({
         required this.id,

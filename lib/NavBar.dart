@@ -155,6 +155,13 @@ class _NavBarState extends State<NavBar> {
         // Metode yang dijalankan saat ditap
         onTap: (index) async{
           setState(() {
+            updateSearchQuery(false, '');
+            if(!_controllerSearch.text.isEmpty){
+              _controllerSearch.clear();
+            }else {
+                cusIcon = Icon(Icons.search);
+                cusSearchBar = Text("Si-KesDes");
+            }
             _currentIndex = index;
           });
         },
